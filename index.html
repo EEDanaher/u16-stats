@@ -28,10 +28,11 @@ h1 { text-align: center; font-size: 22px; font-weight: 800; color: var(--accent)
 .player-row input { flex: 1; background: var(--bg2); border: 1px solid #444; color: var(--text); padding: 11px 12px; border-radius: 8px; font-size: 16px; font-weight: 600; -webkit-appearance: none; appearance: none; min-width: 0; }
 .player-row input:focus { outline: none; border-color: var(--accent); }
 
-.btn { border: none; border-radius: 8px; font-size: 17px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; display: block; width: 100%; padding: 15px; margin-top: 12px; font-family: inherit; }
+.btn { border: none; border-radius: 8px; font-size: 17px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; display: block; width: 100%; padding: 15px; margin-top: 10px; font-family: inherit; }
 .btn-start  { background: var(--accent); color: #1a1a2e; }
 .btn-end    { background: var(--danger); color: #fff; }
-.btn-new    { background: var(--green);  color: #0a2a1a; }
+.btn-same   { background: var(--green);  color: #0a2a1a; }
+.btn-new    { background: var(--blue);   color: #fff; }
 .btn-export { background: #0f3460; color: var(--text); border: 1px solid var(--accent); }
 .btn:active { opacity: 0.75; }
 
@@ -95,26 +96,27 @@ tr:last-child td { border-bottom: none; }
 .bar-chart { display: flex; flex-direction: column; gap: 6px; }
 .bar-row { display: flex; align-items: center; gap: 6px; }
 .bar-name { font-size: 10px; color: var(--muted); width: 60px; flex-shrink: 0; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bar-track { flex: 1; background: #252540; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+.bar-track { flex: 1; background: #252540; border-radius: 3px; height: 22px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; min-width: 2px; }
 .bar-fill span { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); white-space: nowrap; }
 .bar-fill-stacked { height: 100%; display: flex; }
 .bar-seg { height: 100%; display: flex; align-items: center; justify-content: center; }
 .bar-seg span { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.85); }
 
-.divider { border: none; border-top: 1px solid #333; margin: 12px 0; }
-.note { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 8px; }
+.divider { border: none; border-top: 1px solid #333; margin: 14px 0; }
+.note { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; margin-top: 10px; }
 .pct-note { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
 
-.confirm-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
-.confirm-overlay.visible { display: flex; }
-.confirm-box { background: var(--bg2); border: 1px solid #444; border-radius: 12px; padding: 24px 20px; max-width: 300px; width: 90%; text-align: center; }
+.overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; }
+.overlay.visible { display: flex; }
+.confirm-box { background: var(--bg2); border: 1px solid #444; border-radius: 14px; padding: 24px 20px; max-width: 300px; width: 90%; text-align: center; }
 .confirm-box h2 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
 .confirm-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
 .confirm-btns { display: flex; gap: 10px; }
 .confirm-btns button { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; }
-.confirm-cancel { background: #333; color: var(--muted); }
-.confirm-ok { background: var(--green); color: #0a2a1a; }
+.cbtn-cancel { background: #333; color: var(--muted); }
+.cbtn-same   { background: var(--green); color: #0a2a1a; }
+.cbtn-new    { background: var(--blue);  color: #fff; }
 </style>
 </head>
 <body>
@@ -169,21 +171,33 @@ tr:last-child td { border-bottom: none; }
     <div id="tc-pct"   style="display:none"></div>
     <hr class="divider">
     <button class="btn btn-export" onclick="exportCSV()">&#8595; Export CSV for MATLAB</button>
-    <button class="btn btn-new" onclick="confirmNewGame()"><button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>#8635; New Game (same players)</button>
-    <button class="btn btn-new" style="background:#2980b9;color:#fff;margin-top:8px" onclick="confirmNewPlayers()"><button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>#8635; New Game (new players)</button>
-    <p class="note" style="margin-top:8px">% of team = each player's share of total team stats for the game.</p>
+    <button class="btn btn-same"   onclick="confirmSame()">&#8635; New Game — same players</button>
+    <button class="btn btn-new"    onclick="confirmNew()">&#8635; New Game — new players</button>
+    <p class="note">% of team = each player's share of total team stats for the game.</p>
   </div>
 
 </div>
 
-<!-- Confirm dialog -->
-<div class="confirm-overlay" id="confirm-overlay">
+<!-- Confirm: same players -->
+<div class="overlay" id="ov-same">
   <div class="confirm-box">
-    <h2>New Game?</h2>
-    <p>This will reset all stats and timers. Player names will be kept.</p>
+    <h2>Same players?</h2>
+    <p>Stats and timers will reset. Player names are kept.</p>
     <div class="confirm-btns">
-      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="confirm-ok" onclick="newGame()">Yes, reset</button>
+      <button class="cbtn-cancel" onclick="closeOverlay('ov-same')">Cancel</button>
+      <button class="cbtn-same"   onclick="doSame()">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm: new players -->
+<div class="overlay" id="ov-new">
+  <div class="confirm-box">
+    <h2>New players?</h2>
+    <p>Everything will reset including player names.</p>
+    <div class="confirm-btns">
+      <button class="cbtn-cancel" onclick="closeOverlay('ov-new')">Cancel</button>
+      <button class="cbtn-new"    onclick="doNew()">Yes, reset all</button>
     </div>
   </div>
 </div>
@@ -213,14 +227,10 @@ function ftime(s) {
     var lbl = document.createElement('label');
     lbl.textContent = '#'+(i+1);
     var inp = document.createElement('input');
-    inp.type = 'text';
-    inp.id = 'p'+i;
-    inp.value = 'Player '+(i+1);
+    inp.type = 'text'; inp.id = 'p'+i; inp.value = 'Player '+(i+1);
     inp.addEventListener('focus', function(){ this.select(); });
     inp.addEventListener('touchstart', function(){ var t=this; setTimeout(function(){t.select();},50); }, {passive:true});
-    row.appendChild(lbl);
-    row.appendChild(inp);
-    wrap.appendChild(row);
+    row.appendChild(lbl); row.appendChild(inp); wrap.appendChild(row);
   }
   document.getElementById('start-btn').addEventListener('click', startGame);
 })();
@@ -229,48 +239,47 @@ function startGame() {
   players = [];
   for (var i = 0; i < 10; i++) {
     var el = document.getElementById('p'+i);
-    var nm = el ? (el.value || '').trim() : '';
+    var nm = el ? (el.value||'').trim() : '';
     if (!nm) nm = 'Player '+(i+1);
     players.push({name:nm, on:false, sec:0, inTime:null, oreb:0, dreb:0, ast:0});
   }
-  resetGameState();
+  resetState();
   buildTrack();
   show('scr-track');
 }
 
-function resetGameState() {
-  selPlayer = null;
-  curQ = null;
-  qActive = false;
-  clearInterval(timerIv);
-  timerIv = null;
-  timerStart = null;
-  elapsed = 0;
-  statHist = [];
-  tapTmr = {};
+function resetState() {
+  selPlayer = null; curQ = null; qActive = false;
+  clearInterval(timerIv); timerIv = null; timerStart = null; elapsed = 0;
+  statHist = []; tapTmr = {};
   for (var i = 0; i < players.length; i++) {
-    players[i].on = false;
-    players[i].sec = 0;
-    players[i].inTime = null;
-    players[i].oreb = 0;
-    players[i].dreb = 0;
-    players[i].ast = 0;
+    players[i].on = false; players[i].sec = 0; players[i].inTime = null;
+    players[i].oreb = 0; players[i].dreb = 0; players[i].ast = 0;
   }
 }
 
-function confirmNewGame() {
-  document.getElementById('confirm-overlay').classList.add('visible');
-}
+function confirmSame() { document.getElementById('ov-same').classList.add('visible'); }
+function confirmNew()  { document.getElementById('ov-new').classList.add('visible'); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('visible'); }
 
-function closeConfirm() {
-  document.getElementById('confirm-overlay').classList.remove('visible');
-}
-
-function newGame() {
-  closeConfirm();
-  resetGameState();
+function doSame() {
+  closeOverlay('ov-same');
+  resetState();
   buildTrack();
   show('scr-track');
+}
+
+function doNew() {
+  closeOverlay('ov-new');
+  players = [];
+  selPlayer = null; curQ = null; qActive = false;
+  clearInterval(timerIv); timerIv = null; timerStart = null; elapsed = 0;
+  statHist = []; tapTmr = {};
+  for (var i = 0; i < 10; i++) {
+    var el = document.getElementById('p'+i);
+    if (el) el.value = 'Player '+(i+1);
+  }
+  show('scr-setup');
 }
 
 function buildTrack() {
@@ -279,9 +288,7 @@ function buildTrack() {
   for (var qi = 0; qi < QUARTERS.length; qi++) {
     (function(q) {
       var b = document.createElement('button');
-      b.className = 'q-btn';
-      b.id = 'q-'+q;
-      b.textContent = q;
+      b.className = 'q-btn'; b.id = 'q-'+q; b.textContent = q;
       b.addEventListener('click', function(){ toggleQ(q); });
       qbar.appendChild(b);
     })(QUARTERS[qi]);
@@ -291,8 +298,7 @@ function buildTrack() {
   for (var i = 0; i < players.length; i++) {
     (function(idx) {
       var b = document.createElement('button');
-      b.className = 'p-btn';
-      b.id = 'pb'+idx;
+      b.className = 'p-btn'; b.id = 'pb'+idx;
       b.innerHTML = '<span class="pname">'+players[idx].name+'</span><span class="ptime" id="pt'+idx+'">0:00</span><span class="phint">dbl-tap:sub</span>';
       b.addEventListener('click', function(){ handleTap(idx); });
       grid.appendChild(b);
@@ -311,30 +317,18 @@ function buildTrack() {
 }
 
 function handleTap(i) {
-  if (tapTmr[i]) {
-    clearTimeout(tapTmr[i]);
-    delete tapTmr[i];
-    toggleSub(i);
-  } else {
-    tapTmr[i] = setTimeout(function() {
-      delete tapTmr[i];
-      selFor(i);
-    }, 280);
-  }
+  if (tapTmr[i]) { clearTimeout(tapTmr[i]); delete tapTmr[i]; toggleSub(i); }
+  else { tapTmr[i] = setTimeout(function(){ delete tapTmr[i]; selFor(i); }, 280); }
 }
 
 function toggleSub(i) {
-  var p = players[i];
-  var btn = document.getElementById('pb'+i);
-  var now = Date.now();
+  var p = players[i], btn = document.getElementById('pb'+i), now = Date.now();
   if (p.on) {
-    if (qActive && p.inTime) p.sec += Math.round((now - p.inTime)/1000);
-    p.on = false; p.inTime = null;
-    btn.classList.remove('on');
+    if (qActive && p.inTime) p.sec += Math.round((now-p.inTime)/1000);
+    p.on = false; p.inTime = null; btn.classList.remove('on');
     log(p.name+' subbed off ('+(p.sec/60).toFixed(1)+' min)');
   } else {
-    p.on = true; p.inTime = qActive ? now : null;
-    btn.classList.add('on');
+    p.on = true; p.inTime = qActive ? now : null; btn.classList.add('on');
     log(p.name+' subbed on');
   }
   refreshTimes();
@@ -343,16 +337,11 @@ function toggleSub(i) {
 function toggleQ(q) {
   var btn = document.getElementById('q-'+q);
   if (qActive && curQ !== q) {
-    endQ();
-    document.getElementById('q-'+curQ).className = 'q-btn done';
-    log(curQ+' ended');
+    endQ(); document.getElementById('q-'+curQ).className = 'q-btn done'; log(curQ+' ended');
   }
   if (curQ === q && qActive) {
-    endQ();
-    btn.className = 'q-btn done';
-    document.getElementById('qlabel').textContent = q+' ended';
-    log(q+' ended');
-    return;
+    endQ(); btn.className = 'q-btn done';
+    document.getElementById('qlabel').textContent = q+' ended'; log(q+' ended'); return;
   }
   curQ = q; qActive = true;
   for (var qi = 0; qi < QUARTERS.length; qi++) {
@@ -361,8 +350,7 @@ function toggleQ(q) {
   }
   btn.className = 'q-btn active';
   document.getElementById('qlabel').textContent = q+' in progress';
-  log(q+' started');
-  startTimer();
+  log(q+' started'); startTimer();
 }
 
 function endQ() {
@@ -370,14 +358,13 @@ function endQ() {
   var now = Date.now();
   for (var i = 0; i < players.length; i++) {
     var p = players[i];
-    if (p.on && p.inTime) { p.sec += Math.round((now - p.inTime)/1000); p.inTime = now; }
+    if (p.on && p.inTime) { p.sec += Math.round((now-p.inTime)/1000); p.inTime = now; }
   }
 }
 
 function startTimer() {
-  clearInterval(timerIv);
-  timerStart = Date.now() - elapsed*1000;
-  timerIv = setInterval(function() {
+  clearInterval(timerIv); timerStart = Date.now() - elapsed*1000;
+  timerIv = setInterval(function(){
     elapsed = Math.round((Date.now()-timerStart)/1000);
     document.getElementById('timer').textContent = ftime(elapsed);
   }, 1000);
@@ -388,7 +375,7 @@ function selFor(i) {
   selPlayer = i;
   var btns = document.querySelectorAll('.p-btn');
   for (var j = 0; j < btns.length; j++) {
-    if (j === i) btns[j].classList.add('sel'); else btns[j].classList.remove('sel');
+    if (j===i) btns[j].classList.add('sel'); else btns[j].classList.remove('sel');
   }
   document.getElementById('selname').textContent = players[i].name;
   document.getElementById('btn-oreb').disabled = false;
@@ -399,7 +386,7 @@ function selFor(i) {
 function recStat(stat) {
   if (selPlayer === null) return;
   players[selPlayer][stat]++;
-  statHist.push({p: selPlayer, s: stat});
+  statHist.push({p:selPlayer, s:stat});
   log(players[selPlayer].name+': +1 '+stat.toUpperCase());
   refreshTotals();
 }
@@ -415,18 +402,17 @@ function undoLast() {
 function refreshTotals() {
   var stats = ['oreb','dreb','ast'];
   for (var si = 0; si < stats.length; si++) {
-    var s = stats[si], t = 0;
-    for (var i = 0; i < players.length; i++) t += players[i][s];
-    document.getElementById('tot-'+s).textContent = t;
+    var t = 0;
+    for (var i = 0; i < players.length; i++) t += players[i][stats[si]];
+    document.getElementById('tot-'+stats[si]).textContent = t;
   }
 }
 
 function refreshTimes() {
   var now = Date.now();
   for (var i = 0; i < players.length; i++) {
-    var p = players[i];
-    var s = p.sec;
-    if (p.on && qActive && p.inTime) s += Math.round((now - p.inTime)/1000);
+    var p = players[i], s = p.sec;
+    if (p.on && qActive && p.inTime) s += Math.round((now-p.inTime)/1000);
     var el = document.getElementById('pt'+i);
     if (el) el.textContent = ftime(s);
   }
@@ -434,11 +420,9 @@ function refreshTimes() {
 
 function log(msg) {
   var lp = document.getElementById('logpanel');
-  var d = document.createElement('div');
-  d.className = 'log-line';
+  var d = document.createElement('div'); d.className = 'log-line';
   d.textContent = ftime(elapsed)+'  '+msg;
-  lp.appendChild(d);
-  lp.scrollTop = lp.scrollHeight;
+  lp.appendChild(d); lp.scrollTop = lp.scrollHeight;
 }
 
 function endGame() {
@@ -448,23 +432,20 @@ function endGame() {
     var p = players[i];
     if (p.on && p.inTime) { p.sec += Math.round((now-p.inTime)/1000); p.inTime=null; p.on=false; }
   }
-  buildRaw(); buildPct(); buildCharts();
-  switchTab('raw');
-  show('scr-report');
+  buildRaw(); buildPct(); buildCharts(); switchTab('raw'); show('scr-report');
 }
 
 function buildRaw() {
   var mO=0,mD=0,mA=0;
-  for (var i=0;i<players.length;i++) {
+  for (var i=0;i<players.length;i++){
     if(players[i].oreb>mO)mO=players[i].oreb;
     if(players[i].dreb>mD)mD=players[i].dreb;
     if(players[i].ast>mA)mA=players[i].ast;
   }
-  var h = '<div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Min</th><th style="color:#e67e22">Off Reb</th><th style="color:#3498db">Def Reb</th><th style="color:#9b59b6">Assists</th><th>Tot Reb</th></tr></thead><tbody>';
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Min</th><th style="color:#e67e22">Off Reb</th><th style="color:#3498db">Def Reb</th><th style="color:#9b59b6">Assists</th><th>Tot Reb</th></tr></thead><tbody>';
   var tO=0,tD=0,tA=0;
   for (var i=0;i<players.length;i++) {
-    var p=players[i];
-    tO+=p.oreb; tD+=p.dreb; tA+=p.ast;
+    var p=players[i]; tO+=p.oreb; tD+=p.dreb; tA+=p.ast;
     h+='<tr><td>'+p.name+'</td><td>'+(p.sec/60).toFixed(1)+'</td>';
     h+='<td class="'+(p.oreb===mO&&mO>0?'hi':'')+'">'+p.oreb+'</td>';
     h+='<td class="'+(p.dreb===mD&&mD>0?'hi':'')+'">'+p.dreb+'</td>';
@@ -481,99 +462,79 @@ function buildPct() {
   for(var i=0;i<players.length;i++){tO+=players[i].oreb;tD+=players[i].dreb;tA+=players[i].ast;tR+=players[i].oreb+players[i].dreb;}
   var mO=0,mD=0,mA=0,mR=0;
   for(var i=0;i<players.length;i++){
-    if(players[i].oreb>mO)mO=players[i].oreb;
-    if(players[i].dreb>mD)mD=players[i].dreb;
-    if(players[i].ast>mA)mA=players[i].ast;
-    if(players[i].oreb+players[i].dreb>mR)mR=players[i].oreb+players[i].dreb;
+    if(players[i].oreb>mO)mO=players[i].oreb; if(players[i].dreb>mD)mD=players[i].dreb;
+    if(players[i].ast>mA)mA=players[i].ast; if(players[i].oreb+players[i].dreb>mR)mR=players[i].oreb+players[i].dreb;
   }
   var h='<p class="pct-note">Each player\'s share of the team\'s total stats for the game.</p>';
   h+='<div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Min</th><th style="color:#e67e22">Off%</th><th style="color:#3498db">Def%</th><th style="color:#9b59b6">Ast%</th><th>Reb%</th></tr></thead><tbody>';
   for(var i=0;i<players.length;i++){
     var p=players[i], r=p.oreb+p.dreb;
-    var pO=tO>0?Math.round(p.oreb/tO*100)+'%':'-';
-    var pD=tD>0?Math.round(p.dreb/tD*100)+'%':'-';
-    var pA=tA>0?Math.round(p.ast/tA*100)+'%':'-';
-    var pR=tR>0?Math.round(r/tR*100)+'%':'-';
     h+='<tr><td>'+p.name+'</td><td>'+(p.sec/60).toFixed(1)+'</td>';
-    h+='<td class="'+(p.oreb===mO&&mO>0?'hi':'')+'">'+pO+'</td>';
-    h+='<td class="'+(p.dreb===mD&&mD>0?'hi':'')+'">'+pD+'</td>';
-    h+='<td class="'+(p.ast===mA&&mA>0?'hi':'')+'">'+pA+'</td>';
-    h+='<td class="'+(r===mR&&mR>0?'hi':'')+'">'+pR+'</td></tr>';
+    h+='<td class="'+(p.oreb===mO&&mO>0?'hi':'')+'">'+( tO>0?Math.round(p.oreb/tO*100)+'%':'-')+'</td>';
+    h+='<td class="'+(p.dreb===mD&&mD>0?'hi':'')+'">'+( tD>0?Math.round(p.dreb/tD*100)+'%':'-')+'</td>';
+    h+='<td class="'+(p.ast===mA&&mA>0?'hi':'')+'">'+( tA>0?Math.round(p.ast/tA*100)+'%':'-')+'</td>';
+    h+='<td class="'+(r===mR&&mR>0?'hi':'')+'">'+( tR>0?Math.round(r/tR*100)+'%':'-')+'</td></tr>';
   }
   h+='</tbody></table></div>';
   document.getElementById('tc-pct').innerHTML = h;
 }
 
 function makeBar(label, value, maxVal, color) {
-  var pct = maxVal > 0 ? Math.round((value/maxVal)*100) : 0;
-  var row = document.createElement('div'); row.className = 'bar-row';
-  var nm = document.createElement('div'); nm.className = 'bar-name'; nm.title = label; nm.textContent = label;
-  var track = document.createElement('div'); track.className = 'bar-track';
-  var fill = document.createElement('div'); fill.className = 'bar-fill';
-  fill.style.width = pct+'%'; fill.style.background = color;
-  if (value > 0) { var lbl = document.createElement('span'); lbl.textContent = value; fill.appendChild(lbl); }
-  track.appendChild(fill); row.appendChild(nm); row.appendChild(track);
-  return row;
+  var pct = maxVal>0 ? Math.round((value/maxVal)*100) : 0;
+  var row=document.createElement('div'); row.className='bar-row';
+  var nm=document.createElement('div'); nm.className='bar-name'; nm.title=label; nm.textContent=label;
+  var track=document.createElement('div'); track.className='bar-track';
+  var fill=document.createElement('div'); fill.className='bar-fill';
+  fill.style.width=pct+'%'; fill.style.background=color;
+  if(value>0){var l=document.createElement('span');l.textContent=value;fill.appendChild(l);}
+  track.appendChild(fill); row.appendChild(nm); row.appendChild(track); return row;
 }
 
-function makeStackedBar(label, val1, val2, maxVal) {
-  var tot = val1+val2;
-  var pct = maxVal > 0 ? Math.round((tot/maxVal)*100) : 0;
-  var row = document.createElement('div'); row.className = 'bar-row';
-  var nm = document.createElement('div'); nm.className = 'bar-name'; nm.title = label; nm.textContent = label;
-  var track = document.createElement('div'); track.className = 'bar-track';
-  var stack = document.createElement('div'); stack.className = 'bar-fill-stacked';
-  stack.style.width = pct+'%'; stack.style.height = '100%';
-  if (val1 > 0) {
-    var s1 = document.createElement('div'); s1.className = 'bar-seg';
-    s1.style.background = '#e67e22'; s1.style.flex = val1;
-    var l1 = document.createElement('span'); l1.textContent = val1; s1.appendChild(l1); stack.appendChild(s1);
-  }
-  if (val2 > 0) {
-    var s2 = document.createElement('div'); s2.className = 'bar-seg';
-    s2.style.background = '#3498db'; s2.style.flex = val2;
-    var l2 = document.createElement('span'); l2.textContent = val2; s2.appendChild(l2); stack.appendChild(s2);
-  }
-  track.appendChild(stack); row.appendChild(nm); row.appendChild(track);
-  return row;
+function makeStackedBar(label, v1, v2, maxVal) {
+  var tot=v1+v2, pct=maxVal>0?Math.round((tot/maxVal)*100):0;
+  var row=document.createElement('div'); row.className='bar-row';
+  var nm=document.createElement('div'); nm.className='bar-name'; nm.title=label; nm.textContent=label;
+  var track=document.createElement('div'); track.className='bar-track';
+  var stack=document.createElement('div'); stack.className='bar-fill-stacked';
+  stack.style.width=pct+'%'; stack.style.height='100%';
+  if(v1>0){var s1=document.createElement('div');s1.className='bar-seg';s1.style.background='#e67e22';s1.style.flex=v1;var l1=document.createElement('span');l1.textContent=v1;s1.appendChild(l1);stack.appendChild(s1);}
+  if(v2>0){var s2=document.createElement('div');s2.className='bar-seg';s2.style.background='#3498db';s2.style.flex=v2;var l2=document.createElement('span');l2.textContent=v2;s2.appendChild(l2);stack.appendChild(s2);}
+  track.appendChild(stack); row.appendChild(nm); row.appendChild(track); return row;
 }
 
 function buildCharts() {
-  var maxReb=0, maxAst=0, maxMin=0;
+  var maxR=0,maxA=0,maxM=0;
   for(var i=0;i<players.length;i++){
     var r=players[i].oreb+players[i].dreb;
-    if(r>maxReb)maxReb=r;
-    if(players[i].ast>maxAst)maxAst=players[i].ast;
-    var m=players[i].sec/60;
-    if(m>maxMin)maxMin=m;
+    if(r>maxR)maxR=r; if(players[i].ast>maxA)maxA=players[i].ast;
+    var m=players[i].sec/60; if(m>maxM)maxM=m;
   }
-  var wrap = document.getElementById('tc-chart');
-  wrap.innerHTML = '';
+  var wrap=document.getElementById('tc-chart'); wrap.innerHTML='';
 
-  var s1=document.createElement('div'); s1.className='chart-section';
-  var t1=document.createElement('div'); t1.className='chart-title'; t1.textContent='Rebounds (orange = offensive, blue = defensive)';
-  var b1=document.createElement('div'); b1.className='bar-chart';
-  for(var i=0;i<players.length;i++) b1.appendChild(makeStackedBar(players[i].name, players[i].oreb, players[i].dreb, maxReb));
-  s1.appendChild(t1); s1.appendChild(b1); wrap.appendChild(s1);
+  var s1=document.createElement('div');s1.className='chart-section';
+  var t1=document.createElement('div');t1.className='chart-title';t1.textContent='Rebounds (orange = offensive, blue = defensive)';
+  var b1=document.createElement('div');b1.className='bar-chart';
+  for(var i=0;i<players.length;i++) b1.appendChild(makeStackedBar(players[i].name,players[i].oreb,players[i].dreb,maxR));
+  s1.appendChild(t1);s1.appendChild(b1);wrap.appendChild(s1);
 
-  var s2=document.createElement('div'); s2.className='chart-section';
-  var t2=document.createElement('div'); t2.className='chart-title'; t2.textContent='Assists by player';
-  var b2=document.createElement('div'); b2.className='bar-chart';
-  for(var i=0;i<players.length;i++) b2.appendChild(makeBar(players[i].name, players[i].ast, maxAst, '#9b59b6'));
-  s2.appendChild(t2); s2.appendChild(b2); wrap.appendChild(s2);
+  var s2=document.createElement('div');s2.className='chart-section';
+  var t2=document.createElement('div');t2.className='chart-title';t2.textContent='Assists by player';
+  var b2=document.createElement('div');b2.className='bar-chart';
+  for(var i=0;i<players.length;i++) b2.appendChild(makeBar(players[i].name,players[i].ast,maxA,'#9b59b6'));
+  s2.appendChild(t2);s2.appendChild(b2);wrap.appendChild(s2);
 
-  var s3=document.createElement('div'); s3.className='chart-section';
-  var t3=document.createElement('div'); t3.className='chart-title'; t3.textContent='Minutes played';
-  var b3=document.createElement('div'); b3.className='bar-chart';
+  var s3=document.createElement('div');s3.className='chart-section';
+  var t3=document.createElement('div');t3.className='chart-title';t3.textContent='Minutes played';
+  var b3=document.createElement('div');b3.className='bar-chart';
   for(var i=0;i<players.length;i++){
     var mins=parseFloat((players[i].sec/60).toFixed(1));
-    b3.appendChild(makeBar(players[i].name, mins, maxMin, '#e8a838'));
+    b3.appendChild(makeBar(players[i].name,mins,maxM,'#e8a838'));
   }
-  s3.appendChild(t3); s3.appendChild(b3); wrap.appendChild(s3);
+  s3.appendChild(t3);s3.appendChild(b3);wrap.appendChild(s3);
 }
 
 function switchTab(t) {
-  var tabs = ['raw','chart','pct'];
+  var tabs=['raw','chart','pct'];
   for(var i=0;i<tabs.length;i++){
     document.getElementById('tab-'+tabs[i]).className='tab'+(tabs[i]===t?' active':'');
     document.getElementById('tc-'+tabs[i]).style.display=tabs[i]===t?'block':'none';
@@ -585,44 +546,21 @@ function exportCSV() {
   for(var i=0;i<players.length;i++){tO+=players[i].oreb;tD+=players[i].dreb;tA+=players[i].ast;tR+=players[i].oreb+players[i].dreb;}
   var rows=[['Player','MinutesPlayed','OffReb','DefReb','TotalReb','Assists','OffReb_Pct','DefReb_Pct','TotalReb_Pct','Assists_Pct']];
   for(var i=0;i<players.length;i++){
-    var p=players[i], r=p.oreb+p.dreb;
+    var p=players[i],r=p.oreb+p.dreb;
     rows.push([p.name,(p.sec/60).toFixed(2),p.oreb,p.dreb,r,p.ast,
-      tO>0?((p.oreb/tO)*100).toFixed(1):'0',
-      tD>0?((p.dreb/tD)*100).toFixed(1):'0',
-      tR>0?((r/tR)*100).toFixed(1):'0',
-      tA>0?((p.ast/tA)*100).toFixed(1):'0']);
+      tO>0?((p.oreb/tO)*100).toFixed(1):'0', tD>0?((p.dreb/tD)*100).toFixed(1):'0',
+      tR>0?((r/tR)*100).toFixed(1):'0', tA>0?((p.ast/tA)*100).toFixed(1):'0']);
   }
   var csv='';
   for(var i=0;i<rows.length;i++) csv+=rows[i].join(',')+'\n';
   var blob=new Blob([csv],{type:'text/csv'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url; a.download='game_stats.csv';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
+  var a=document.createElement('a'); a.href=url; a.download='game_stats.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-function confirmNewPlayers() {
-  document.getElementById("confirm-overlay2").classList.add("visible");
-}
-function closeConfirm2() {
-  document.getElementById("confirm-overlay2").classList.remove("visible");
-}
-function newPlayers() {
-  closeConfirm2();
-  stopTimer();
-  players = [];
-  selPlayer = null; curQ = null; qActive = false;
-  clearInterval(timerIv); timerIv = null; timerStart = null; elapsed = 0;
-  statHist = []; tapTmr = {};
-  for (var i = 0; i < 10; i++) {
-    var el = document.getElementById("p"+i);
-    if (el) el.value = "Player "+(i+1);
-  }
-  show("scr-setup");
-}
 function show(id) {
-  var screens = document.querySelectorAll('.screen');
+  var screens=document.querySelectorAll('.screen');
   for(var i=0;i<screens.length;i++) screens[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
@@ -630,15 +568,5 @@ function show(id) {
 
 setInterval(refreshTimes, 5000);
 </script>
-<div class="confirm-overlay" id="confirm-overlay2">
-  <div class="confirm-box">
-    <h2>New Game?</h2>
-    <p>This will reset everything including player names.</p>
-    <div class="confirm-btns">
-      <button class="confirm-cancel" onclick="closeConfirm2()">Cancel</button>
-      <button class="confirm-ok" style="background:#2980b9" onclick="newPlayers()">Yes, reset all</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
