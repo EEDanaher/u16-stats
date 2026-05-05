@@ -169,7 +169,8 @@ tr:last-child td { border-bottom: none; }
     <div id="tc-pct"   style="display:none"></div>
     <hr class="divider">
     <button class="btn btn-export" onclick="exportCSV()">&#8595; Export CSV for MATLAB</button>
-    <button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>
+    <button class="btn btn-new" onclick="confirmNewGame()"><button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>#8635; New Game (same players)</button>
+    <button class="btn btn-new" style="background:#2980b9;color:#fff;margin-top:8px" onclick="confirmNewPlayers()"><button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>#8635; New Game (new players)</button>
     <p class="note" style="margin-top:8px">% of team = each player's share of total team stats for the game.</p>
   </div>
 
@@ -601,6 +602,25 @@ function exportCSV() {
   document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
+function confirmNewPlayers() {
+  document.getElementById("confirm-overlay2").classList.add("visible");
+}
+function closeConfirm2() {
+  document.getElementById("confirm-overlay2").classList.remove("visible");
+}
+function newPlayers() {
+  closeConfirm2();
+  stopTimer();
+  players = [];
+  selPlayer = null; curQ = null; qActive = false;
+  clearInterval(timerIv); timerIv = null; timerStart = null; elapsed = 0;
+  statHist = []; tapTmr = {};
+  for (var i = 0; i < 10; i++) {
+    var el = document.getElementById("p"+i);
+    if (el) el.value = "Player "+(i+1);
+  }
+  show("scr-setup");
+}
 function show(id) {
   var screens = document.querySelectorAll('.screen');
   for(var i=0;i<screens.length;i++) screens[i].classList.remove('active');
@@ -610,5 +630,15 @@ function show(id) {
 
 setInterval(refreshTimes, 5000);
 </script>
+<div class="confirm-overlay" id="confirm-overlay2">
+  <div class="confirm-box">
+    <h2>New Game?</h2>
+    <p>This will reset everything including player names.</p>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm2()">Cancel</button>
+      <button class="confirm-ok" style="background:#2980b9" onclick="newPlayers()">Yes, reset all</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
