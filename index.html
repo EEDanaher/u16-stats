@@ -29,8 +29,10 @@ h1 { text-align: center; font-size: 22px; font-weight: 800; color: var(--accent)
 .player-row input:focus { outline: none; border-color: var(--accent); }
 
 .btn { border: none; border-radius: 8px; font-size: 17px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; display: block; width: 100%; padding: 15px; margin-top: 12px; font-family: inherit; }
-.btn-start { background: var(--accent); color: #1a1a2e; }
-.btn-end { background: var(--danger); color: #fff; }
+.btn-start  { background: var(--accent); color: #1a1a2e; }
+.btn-end    { background: var(--danger); color: #fff; }
+.btn-new    { background: var(--green);  color: #0a2a1a; }
+.btn-export { background: #0f3460; color: var(--text); border: 1px solid var(--accent); }
 .btn:active { opacity: 0.75; }
 
 .quarter-bar { display: flex; gap: 6px; margin-bottom: 10px; }
@@ -71,7 +73,6 @@ h1 { text-align: center; font-size: 22px; font-weight: 800; color: var(--accent)
 .log-wrap { background: var(--bg2); border-radius: 8px; padding: 8px; max-height: 80px; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 10px; }
 .log-line { font-size: 10px; color: var(--muted); border-bottom: 1px solid #222; padding: 2px 0; }
 .log-line:last-child { color: #bbb; border-bottom: none; }
-
 .undo-btn { background: transparent; border: 1px solid #444; color: var(--muted); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; display: block; margin: 0 auto 8px; font-family: inherit; }
 
 .report-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -89,22 +90,31 @@ td:first-child { text-align: left; color: var(--accent); font-weight: 700; font-
 tr:last-child td { border-bottom: none; }
 .hi { color: var(--accent); font-weight: 800; }
 
-/* CSS BAR CHARTS */
 .chart-section { margin-bottom: 20px; }
 .chart-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .bar-chart { display: flex; flex-direction: column; gap: 6px; }
 .bar-row { display: flex; align-items: center; gap: 6px; }
 .bar-name { font-size: 10px; color: var(--muted); width: 60px; flex-shrink: 0; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bar-track { flex: 1; background: #252540; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; min-width: 2px; transition: width 0.4s; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; min-width: 2px; }
 .bar-fill span { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); white-space: nowrap; }
 .bar-fill-stacked { height: 100%; display: flex; }
 .bar-seg { height: 100%; display: flex; align-items: center; justify-content: center; }
 .bar-seg span { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.85); }
 
-.export-btn { background: #0f3460; color: var(--text); border: 1px solid var(--accent); border-radius: 8px; padding: 12px; width: 100%; font-size: 14px; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; margin-bottom: 8px; font-family: inherit; }
-.note { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 12px; }
+.divider { border: none; border-top: 1px solid #333; margin: 12px 0; }
+.note { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 8px; }
 .pct-note { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+
+.confirm-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+.confirm-overlay.visible { display: flex; }
+.confirm-box { background: var(--bg2); border: 1px solid #444; border-radius: 12px; padding: 24px 20px; max-width: 300px; width: 90%; text-align: center; }
+.confirm-box h2 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+.confirm-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+.confirm-btns { display: flex; gap: 10px; }
+.confirm-btns button { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; }
+.confirm-cancel { background: #333; color: var(--muted); }
+.confirm-ok { background: var(--green); color: #0a2a1a; }
 </style>
 </head>
 <body>
@@ -157,11 +167,26 @@ tr:last-child td { border-bottom: none; }
     <div id="tc-raw"></div>
     <div id="tc-chart" style="display:none"></div>
     <div id="tc-pct"   style="display:none"></div>
-    <button class="export-btn" onclick="exportCSV()">&#8595; Export CSV for MATLAB</button>
-    <p class="note">% of team = each player's share of total team stats for the game.</p>
+    <hr class="divider">
+    <button class="btn btn-export" onclick="exportCSV()">&#8595; Export CSV for MATLAB</button>
+    <button class="btn btn-new" onclick="confirmNewGame()">&#8635; New Game (same players)</button>
+    <p class="note" style="margin-top:8px">% of team = each player's share of total team stats for the game.</p>
   </div>
 
 </div>
+
+<!-- Confirm dialog -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h2>New Game?</h2>
+    <p>This will reset all stats and timers. Player names will be kept.</p>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-ok" onclick="newGame()">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
 <script>
 var QUARTERS = ['Q1','Q2','Q3','Q4'];
 var players = [];
@@ -207,6 +232,42 @@ function startGame() {
     if (!nm) nm = 'Player '+(i+1);
     players.push({name:nm, on:false, sec:0, inTime:null, oreb:0, dreb:0, ast:0});
   }
+  resetGameState();
+  buildTrack();
+  show('scr-track');
+}
+
+function resetGameState() {
+  selPlayer = null;
+  curQ = null;
+  qActive = false;
+  clearInterval(timerIv);
+  timerIv = null;
+  timerStart = null;
+  elapsed = 0;
+  statHist = [];
+  tapTmr = {};
+  for (var i = 0; i < players.length; i++) {
+    players[i].on = false;
+    players[i].sec = 0;
+    players[i].inTime = null;
+    players[i].oreb = 0;
+    players[i].dreb = 0;
+    players[i].ast = 0;
+  }
+}
+
+function confirmNewGame() {
+  document.getElementById('confirm-overlay').classList.add('visible');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('visible');
+}
+
+function newGame() {
+  closeConfirm();
+  resetGameState();
   buildTrack();
   show('scr-track');
 }
@@ -236,6 +297,16 @@ function buildTrack() {
       grid.appendChild(b);
     })(i);
   }
+  document.getElementById('logpanel').innerHTML = '';
+  document.getElementById('qlabel').textContent = 'Select a quarter';
+  document.getElementById('timer').textContent = '00:00';
+  document.getElementById('selname').textContent = '— tap a player —';
+  document.getElementById('tot-oreb').textContent = '0';
+  document.getElementById('tot-dreb').textContent = '0';
+  document.getElementById('tot-ast').textContent  = '0';
+  document.getElementById('btn-oreb').disabled = true;
+  document.getElementById('btn-dreb').disabled = true;
+  document.getElementById('btn-ast').disabled  = true;
 }
 
 function handleTap(i) {
@@ -377,6 +448,7 @@ function endGame() {
     if (p.on && p.inTime) { p.sec += Math.round((now-p.inTime)/1000); p.inTime=null; p.on=false; }
   }
   buildRaw(); buildPct(); buildCharts();
+  switchTab('raw');
   show('scr-report');
 }
 
@@ -433,67 +505,35 @@ function buildPct() {
 
 function makeBar(label, value, maxVal, color) {
   var pct = maxVal > 0 ? Math.round((value/maxVal)*100) : 0;
-  var row = document.createElement('div');
-  row.className = 'bar-row';
-  var nm = document.createElement('div');
-  nm.className = 'bar-name';
-  nm.title = label;
-  nm.textContent = label;
-  var track = document.createElement('div');
-  track.className = 'bar-track';
-  var fill = document.createElement('div');
-  fill.className = 'bar-fill';
-  fill.style.width = pct+'%';
-  fill.style.background = color;
-  if (value > 0) {
-    var lbl = document.createElement('span');
-    lbl.textContent = value;
-    fill.appendChild(lbl);
-  }
-  track.appendChild(fill);
-  row.appendChild(nm);
-  row.appendChild(track);
+  var row = document.createElement('div'); row.className = 'bar-row';
+  var nm = document.createElement('div'); nm.className = 'bar-name'; nm.title = label; nm.textContent = label;
+  var track = document.createElement('div'); track.className = 'bar-track';
+  var fill = document.createElement('div'); fill.className = 'bar-fill';
+  fill.style.width = pct+'%'; fill.style.background = color;
+  if (value > 0) { var lbl = document.createElement('span'); lbl.textContent = value; fill.appendChild(lbl); }
+  track.appendChild(fill); row.appendChild(nm); row.appendChild(track);
   return row;
 }
 
-function makeStackedBar(label, val1, val2, max12) {
-  var tot = val1 + val2;
-  var pct = max12 > 0 ? Math.round((tot/max12)*100) : 0;
-  var row = document.createElement('div');
-  row.className = 'bar-row';
-  var nm = document.createElement('div');
-  nm.className = 'bar-name';
-  nm.title = label;
-  nm.textContent = label;
-  var track = document.createElement('div');
-  track.className = 'bar-track';
-  var stack = document.createElement('div');
-  stack.className = 'bar-fill-stacked';
-  stack.style.width = pct+'%';
-  stack.style.height = '100%';
+function makeStackedBar(label, val1, val2, maxVal) {
+  var tot = val1+val2;
+  var pct = maxVal > 0 ? Math.round((tot/maxVal)*100) : 0;
+  var row = document.createElement('div'); row.className = 'bar-row';
+  var nm = document.createElement('div'); nm.className = 'bar-name'; nm.title = label; nm.textContent = label;
+  var track = document.createElement('div'); track.className = 'bar-track';
+  var stack = document.createElement('div'); stack.className = 'bar-fill-stacked';
+  stack.style.width = pct+'%'; stack.style.height = '100%';
   if (val1 > 0) {
-    var s1 = document.createElement('div');
-    s1.className = 'bar-seg';
-    s1.style.background = '#e67e22';
-    s1.style.flex = val1;
-    var l1 = document.createElement('span');
-    l1.textContent = val1;
-    s1.appendChild(l1);
-    stack.appendChild(s1);
+    var s1 = document.createElement('div'); s1.className = 'bar-seg';
+    s1.style.background = '#e67e22'; s1.style.flex = val1;
+    var l1 = document.createElement('span'); l1.textContent = val1; s1.appendChild(l1); stack.appendChild(s1);
   }
   if (val2 > 0) {
-    var s2 = document.createElement('div');
-    s2.className = 'bar-seg';
-    s2.style.background = '#3498db';
-    s2.style.flex = val2;
-    var l2 = document.createElement('span');
-    l2.textContent = val2;
-    s2.appendChild(l2);
-    stack.appendChild(s2);
+    var s2 = document.createElement('div'); s2.className = 'bar-seg';
+    s2.style.background = '#3498db'; s2.style.flex = val2;
+    var l2 = document.createElement('span'); l2.textContent = val2; s2.appendChild(l2); stack.appendChild(s2);
   }
-  track.appendChild(stack);
-  row.appendChild(nm);
-  row.appendChild(track);
+  track.appendChild(stack); row.appendChild(nm); row.appendChild(track);
   return row;
 }
 
@@ -506,27 +546,26 @@ function buildCharts() {
     var m=players[i].sec/60;
     if(m>maxMin)maxMin=m;
   }
-
   var wrap = document.getElementById('tc-chart');
   wrap.innerHTML = '';
 
-  var s1 = document.createElement('div'); s1.className='chart-section';
-  var t1 = document.createElement('div'); t1.className='chart-title'; t1.textContent='Rebounds by player (orange=offensive, blue=defensive)';
-  var b1 = document.createElement('div'); b1.className='bar-chart';
+  var s1=document.createElement('div'); s1.className='chart-section';
+  var t1=document.createElement('div'); t1.className='chart-title'; t1.textContent='Rebounds (orange = offensive, blue = defensive)';
+  var b1=document.createElement('div'); b1.className='bar-chart';
   for(var i=0;i<players.length;i++) b1.appendChild(makeStackedBar(players[i].name, players[i].oreb, players[i].dreb, maxReb));
   s1.appendChild(t1); s1.appendChild(b1); wrap.appendChild(s1);
 
-  var s2 = document.createElement('div'); s2.className='chart-section';
-  var t2 = document.createElement('div'); t2.className='chart-title'; t2.textContent='Assists by player';
-  var b2 = document.createElement('div'); b2.className='bar-chart';
+  var s2=document.createElement('div'); s2.className='chart-section';
+  var t2=document.createElement('div'); t2.className='chart-title'; t2.textContent='Assists by player';
+  var b2=document.createElement('div'); b2.className='bar-chart';
   for(var i=0;i<players.length;i++) b2.appendChild(makeBar(players[i].name, players[i].ast, maxAst, '#9b59b6'));
   s2.appendChild(t2); s2.appendChild(b2); wrap.appendChild(s2);
 
-  var s3 = document.createElement('div'); s3.className='chart-section';
-  var t3 = document.createElement('div'); t3.className='chart-title'; t3.textContent='Minutes played';
-  var b3 = document.createElement('div'); b3.className='bar-chart';
-  for(var i=0;i<players.length;i++) {
-    var mins = parseFloat((players[i].sec/60).toFixed(1));
+  var s3=document.createElement('div'); s3.className='chart-section';
+  var t3=document.createElement('div'); t3.className='chart-title'; t3.textContent='Minutes played';
+  var b3=document.createElement('div'); b3.className='bar-chart';
+  for(var i=0;i<players.length;i++){
+    var mins=parseFloat((players[i].sec/60).toFixed(1));
     b3.appendChild(makeBar(players[i].name, mins, maxMin, '#e8a838'));
   }
   s3.appendChild(t3); s3.appendChild(b3); wrap.appendChild(s3);
@@ -554,9 +593,9 @@ function exportCSV() {
   }
   var csv='';
   for(var i=0;i<rows.length;i++) csv+=rows[i].join(',')+'\n';
-  var blob = new Blob([csv],{type:'text/csv'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
   a.href=url; a.download='game_stats.csv';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
