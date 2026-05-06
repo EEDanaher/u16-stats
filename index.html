@@ -786,11 +786,19 @@ function show(id){
 
 setInterval(refreshTimes,5000);
 
-// Prevent iOS scroll jiggle on the tracking screen
+// Prevent iOS scroll jiggle only when touch started on a button
 (function() {
-  var lastY = 0;
+  var touchOnButton = false;
+  document.getElementById('scr-track').addEventListener('touchstart', function(e) {
+    var t = e.target;
+    touchOnButton = false;
+    while (t && t !== this) {
+      if (t.tagName === 'BUTTON') { touchOnButton = true; break; }
+      t = t.parentElement;
+    }
+  }, {passive: true});
   document.getElementById('scr-track').addEventListener('touchmove', function(e) {
-    e.preventDefault();
+    if (touchOnButton) e.preventDefault();
   }, {passive: false});
 })();
 
