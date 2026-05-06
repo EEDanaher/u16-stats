@@ -88,7 +88,7 @@ h1 { text-align: center; font-size: 20px; font-weight: 800; color: var(--accent)
 .tot span { font-size: 20px; font-weight: 800; color: var(--text); display: block; }
 
 /* LOG */
-.log-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; max-height: 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 10px; }
+.log-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; height: 90px; min-height: 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 10px; }
 .log-line { font-size: 10px; color: var(--muted); border-bottom: 1px solid var(--border); padding: 2px 0; font-family: 'Courier New', monospace; }
 .log-line:last-child { color: var(--text); border-bottom: none; }
 .log-line.score-us   { color: var(--green); font-weight: 700; }
@@ -162,6 +162,22 @@ tr:last-child td { border-bottom: none; }
 .cbtn-cancel { background: var(--bg2); color: var(--muted); border: 1px solid var(--border) !important; }
 .cbtn-same   { background: var(--green); color: #fff; }
 .cbtn-new    { background: var(--blue);  color: #fff; }
+
+/* Button press feedback */
+@keyframes btnFlash {
+  0%   { transform: scale(1); filter: brightness(1); }
+  30%  { transform: scale(0.93); filter: brightness(1.35); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.btn-flash {
+  animation: btnFlash 0.28s ease-out;
+}
+.s-btn.oreb.btn-flash { background: #fff3e0 !important; border-color: var(--orange) !important; }
+.s-btn.dreb.btn-flash { background: #e8f0ff !important; border-color: var(--blue) !important; }
+.s-btn.ast.btn-flash  { background: #f3eaff !important; border-color: var(--purple) !important; }
+.s-btn.stl.btn-flash  { background: #e6f7ef !important; border-color: #059669 !important; }
+.sc-log-btn.btn-flash { opacity: 0.7; }
+.q-btn.btn-flash { filter: brightness(1.3); }
 </style>
 </head>
 <body>
@@ -276,6 +292,16 @@ var qStats={};
 var fullLog=[];
 var scoreUs=0, scoreThem=0;
 
+
+function flashBtn(el) {
+  el.classList.remove('btn-flash');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('btn-flash');
+  el.addEventListener('animationend', function handler() {
+    el.classList.remove('btn-flash');
+    el.removeEventListener('animationend', handler);
+  });
+}
 function ftime(s){var m=Math.floor(s/60),sec=s%60;return(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;}
 
 function initQS(q){if(!qStats[q])qStats[q]={oreb:0,dreb:0,ast:0,stl:0,scoreUs:0,scoreThem:0};}
@@ -394,6 +420,7 @@ function toggleQ(q){
   curQ=q;qActive=true;initQS(q);
   for(var qi=0;qi<QUARTERS.length;qi++){var b=document.getElementById('q-'+QUARTERS[qi]);if(QUARTERS[qi]!==q&&!b.classList.contains('done'))b.className='q-btn';}
   btn.className='q-btn active';
+  flashBtn(btn);
   document.getElementById('qlabel').textContent=q+' in progress';
   for(var i=0;i<players.length;i++){if(players[i].on){players[i].inTime=Date.now();initPQS(i,q);}}
   log(q+' started');startTimer();
@@ -415,6 +442,7 @@ function stopTimer(){clearInterval(timerIv);}
 
 function logScore(side){
   var isUs=(side==='us');
+  flashBtn(document.querySelector('.sc-log-btn.'+(isUs?'us':'them')));
   if(isUs)scoreUs++;else scoreThem++;
   if(curQ){initQS(curQ);qStats[curQ][isUs?'scoreUs':'scoreThem']++;}
   var msg=(isUs?'WE SCORED':'THEY SCORED')+' — '+scoreUs+' : '+scoreThem;
@@ -427,6 +455,7 @@ function logScore(side){
 
 function recStat(stat){
   if(selPlayer===null)return;
+  flashBtn(document.getElementById('btn-'+stat));
   players[selPlayer][stat]++;
   if(curQ){initQS(curQ);qStats[curQ][stat]++;initPQS(selPlayer,curQ);players[selPlayer].qStats[curQ][stat]++;}
   statHist.push({p:selPlayer,s:stat,q:curQ});
