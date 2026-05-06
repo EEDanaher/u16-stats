@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIj4KICA8cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjM2IiBmaWxsPSIjMWEzYThmIi8+CiAgPHRleHQgeD0iOTAiIHk9IjcyIiBmb250LWZhbWlseT0iQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlOGE4MzgiPlUxNjwvdGV4dD4KICA8cmVjdCB4PSIzMCIgeT0iODUiIHdpZHRoPSIxMjAiIGhlaWdodD0iMyIgZmlsbD0iI2U4YTgzOCIgb3BhY2l0eT0iMC42Ii8+CiAgPHRleHQgeD0iOTAiIHk9IjE0MCIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZThhODM4Ij5UMzwvdGV4dD4KPC9zdmc+">
+
 
 
 
@@ -34,7 +34,7 @@ h1 { text-align: center; font-size: 20px; font-weight: 800; color: var(--accent)
 .player-row input { flex: 1; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 11px 12px; border-radius: 8px; font-size: 16px; font-weight: 600; -webkit-appearance: none; appearance: none; min-width: 0; }
 .player-row input:focus { outline: none; border-color: var(--accent); background: var(--accentbg); }
 
-.btn { border: none; border-radius: 8px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; display: block; width: 100%; padding: 14px; margin-top: 10px; font-family: inherit; }
+.btn { touch-action: manipulation; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; display: block; width: 100%; padding: 14px; margin-top: 10px; font-family: inherit; }
 .btn-start  { background: var(--accent); color: #fff; }
 .btn-end    { background: var(--danger); color: #fff; }
 .btn-same   { background: var(--green);  color: #fff; }
@@ -45,7 +45,7 @@ h1 { text-align: center; font-size: 20px; font-weight: 800; color: var(--accent)
 
 /* QUARTERS */
 .quarter-bar { display: flex; gap: 6px; margin-bottom: 8px; }
-.q-btn { flex: 1; padding: 11px 0; border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; font-size: 17px; font-weight: 800; cursor: pointer; -webkit-appearance: none; font-family: inherit; }
+.q-btn { touch-action: manipulation; flex: 1; padding: 11px 0; border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; font-size: 17px; font-weight: 800; cursor: pointer; -webkit-appearance: none; font-family: inherit; }
 .q-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accentbg); }
 .q-btn.done { border-color: var(--bg3); color: var(--bg3); background: var(--bg); }
 
@@ -54,15 +54,15 @@ h1 { text-align: center; font-size: 20px; font-weight: 800; color: var(--accent)
 
 /* SCORE LOG BUTTON */
 .score-log-row { display: flex; gap: 6px; margin-bottom: 10px; }
-.sc-log-btn { flex: 1; padding: 10px; border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; -webkit-appearance: none; text-transform: uppercase; }
+.sc-log-btn { touch-action: manipulation; flex: 1; padding: 10px; border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; -webkit-appearance: none; text-transform: uppercase; }
 .sc-log-btn.us   { border-color: var(--green);  color: var(--green);  background: var(--greenbg); }
 .sc-log-btn.them { border-color: var(--danger);  color: var(--danger); background: #fff5f5; }
 .sc-log-btn:active { opacity: 0.6; }
 
 /* PLAYERS */
-.tap-hint { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 6px; background: var(--bg2); border-radius: 6px; padding: 5px; }
+.tap-hint { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 6px; background: var(--bg2); border-radius: 6px; padding: 5px; height: 30px; min-height: 30px; overflow: hidden; }
 .players-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 10px; height: 138px; min-height: 138px; }
-.p-btn { border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; padding: 6px 2px; height: 64px; min-height: 64px; max-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; -webkit-appearance: none; -webkit-user-select: none; user-select: none; font-family: inherit; width: 100%; overflow: hidden; }
+.p-btn { touch-action: manipulation; border: 2px solid var(--border); background: var(--bg2); color: var(--muted); border-radius: 8px; padding: 6px 2px; height: 64px; min-height: 64px; max-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; -webkit-appearance: none; -webkit-user-select: none; user-select: none; font-family: inherit; width: 100%; overflow: hidden; }
 .p-btn .pname { font-size: 13px; font-weight: 700; line-height: 1.2; word-break: break-word; text-align: center; color: var(--text); }
 .p-btn .ptime { font-size: 10px; font-weight: 600; color: var(--muted); }
 .p-btn .pstatus { font-size: 9px; color: #aab0b8; letter-spacing: 0.3px; text-transform: uppercase; }
@@ -79,7 +79,7 @@ h1 { text-align: center; font-size: 20px; font-weight: 800; color: var(--accent)
 .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 6px; }
 .sel-name { font-size: 19px; font-weight: 800; color: var(--accent); text-align: center; margin-bottom: 10px; height: 26px; min-height: 26px; max-height: 26px; letter-spacing: 0.5px; text-transform: uppercase; overflow: hidden; }
 .stat-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.s-btn { padding: 13px 4px; border: 2px solid; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; text-transform: uppercase; line-height: 1.2; -webkit-appearance: none; font-family: inherit; background: #fff; }
+.s-btn { touch-action: manipulation; padding: 13px 4px; border: 2px solid; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; text-transform: uppercase; line-height: 1.2; -webkit-appearance: none; font-family: inherit; background: #fff; }
 .s-btn:active { opacity: 0.6; }
 .s-btn.oreb { border-color: var(--orange); color: var(--orange); }
 .s-btn.dreb { border-color: var(--blue);   color: var(--blue); }
@@ -183,6 +183,48 @@ tr:last-child td { border-bottom: none; }
 .sc-log-btn.btn-flash { opacity: 0.7; }
 .q-btn.btn-flash { filter: brightness(1.3); }
 </style>
+
+<script>
+// Generate apple-touch-icon dynamically
+(function(){
+  try {
+    var c = document.createElement('canvas');
+    c.width = 180; c.height = 180;
+    var ctx = c.getContext('2d');
+    // Rounded rect background
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r,0); ctx.lineTo(180-r,0);
+    ctx.quadraticCurveTo(180,0,180,r);
+    ctx.lineTo(180,180-r);
+    ctx.quadraticCurveTo(180,180,180-r,180);
+    ctx.lineTo(r,180);
+    ctx.quadraticCurveTo(0,180,0,180-r);
+    ctx.lineTo(0,r);
+    ctx.quadraticCurveTo(0,0,r,0);
+    ctx.closePath();
+    ctx.fillStyle='#1a3a8f';
+    ctx.fill();
+    // Gold text
+    ctx.fillStyle='#e8a838';
+    ctx.font='bold 52px -apple-system, Arial, sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText('U16', 90, 74);
+    // Divider
+    ctx.fillStyle='rgba(232,168,56,0.6)';
+    ctx.fillRect(30,85,120,3);
+    // T3
+    ctx.fillStyle='#e8a838';
+    ctx.font='bold 58px -apple-system, Arial, sans-serif';
+    ctx.fillText('T3', 90, 142);
+    // Set as icon
+    var link = document.createElement('link');
+    link.rel = 'apple-touch-icon';
+    link.href = c.toDataURL('image/png');
+    document.head.appendChild(link);
+  } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div id="app">
@@ -743,6 +785,15 @@ function show(id){
 }
 
 setInterval(refreshTimes,5000);
+
+// Prevent iOS scroll jiggle on the tracking screen
+(function() {
+  var lastY = 0;
+  document.getElementById('scr-track').addEventListener('touchmove', function(e) {
+    e.preventDefault();
+  }, {passive: false});
+})();
+
 </script>
 </body>
 </html>
